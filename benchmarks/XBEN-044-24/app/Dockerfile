@@ -20,10 +20,6 @@ RUN groupadd -g 1000 appuser && \
 
 RUN chown -R appuser:appuser /var/www/html
 
-USER appuser
-
-RUN composer install 
-
 USER root
 RUN chown -R www-data:www-data /var/www/html/vendor
 

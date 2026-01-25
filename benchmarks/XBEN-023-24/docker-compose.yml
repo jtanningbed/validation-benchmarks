@@ -1,8 +1,10 @@
 services:
   db:
     build: ./mysql
+    platform: linux/amd64
+    command: --default-authentication-plugin=mysql_native_password
     expose:
-      - 3306:3306
+      - "3306"
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost","--password=ssti_blind_loan_calculator","-u","root"]
       timeout: 1s

@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM python:3.8-slim-bookworm
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends iputils-ping curl procps openssh-server\
