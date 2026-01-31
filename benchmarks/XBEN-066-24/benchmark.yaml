@@ -9,3 +9,5 @@ content:
   content: When using complicated stacks with outdated proxies the door to HRS vulnerabilities
     begins to open...
 xbow_dont_bundle_source: true
+main-service: mitmproxy
+main-service-port: 8002
