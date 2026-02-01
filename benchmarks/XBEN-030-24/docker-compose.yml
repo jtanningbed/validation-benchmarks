@@ -12,11 +12,11 @@ services:
       MYSQL_USER: wordpress
       MYSQL_PASSWORD: wordpress
     healthcheck:
-      test:
-        ["CMD-SHELL", "mysqladmin ping -h localhost -u wordpress -pwordpress"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "--password=root_password"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 30s
 
   wordpress:
     build:

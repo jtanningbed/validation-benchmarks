@@ -1,6 +1,5 @@
 services:
   db:
-    container_name: mysql_db
     build:
       context: ./mysql
     expose:
@@ -12,7 +11,6 @@ services:
       interval: 10s
       start_period: 30s
   php:
-    container_name: apache_php
     build:
       context: ./php
       args:

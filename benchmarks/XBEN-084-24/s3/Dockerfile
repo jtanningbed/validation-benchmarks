@@ -1,8 +1,8 @@
-FROM node:14-alpine
+FROM node:18-alpine
 
 RUN apk --no-cache add curl
 WORKDIR /app
 COPY . .
-RUN npm install 
+RUN npm install
 EXPOSE 8333
 CMD [ "npm", "start" ]

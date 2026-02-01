@@ -1,7 +1,6 @@
 services:
   web:
     build: ./app
-    container_name: sstitwig2
     ports:
       - 8081
     depends_on:
@@ -16,7 +15,6 @@ services:
 
   skumodel:
     build: ./app/skumodel-srv
-    container_name: skumodel
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4455/index.php"]
       timeout: 10s
