@@ -1,7 +1,10 @@
+SetEnvIf Request_Method "^(HEAD|PUT|DELETE|OPTIONS|PATCH)$" noauth
+
 AuthType Basic
 AuthName "Protected Area"
-AuthUserFile .htpasswd
+AuthUserFile /var/www/html/.htpasswd
 
-<Limit GET POST>
+<RequireAny>
+    Require env noauth
     Require valid-user
-</Limit>
+</RequireAny>
