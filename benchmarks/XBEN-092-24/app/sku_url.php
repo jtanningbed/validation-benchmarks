@@ -20,12 +20,17 @@ class SkuService {
             $url = str_replace($urlComponents['host'], 'skumodel', $url);
         }
 
+        // Forward relevant POST parameters to internal service
+        $postData = [];
+        if (isset($_POST['data'])) $postData['data'] = $_POST['data'];
+        if (isset($_POST['file_path'])) $postData['file_path'] = $_POST['file_path'];
+
         // Set up the stream context
         $options = [
             'http' => [
                 'method' => 'POST',
                 'header' => 'Content-Type: application/x-www-form-urlencoded',
-                'content' => http_build_query(['param1' => 'value1', 'param2' => 'value2'])
+                'content' => http_build_query($postData)
             ]
         ];
         $context = stream_context_create($options);
