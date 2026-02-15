@@ -4,7 +4,7 @@ error_reporting(0);
 $post_id = $_GET['id'];
 $posts_path = "posts/";
 // Remove any attempts to include directories
-$post_id = str_replace(['../', './', '..\\', '.\\'], '', $post_id);
+$post_id = str_replace(['../', '..\\', '.\\'], '', $post_id);
 $file_to_include = $posts_path . $post_id;
 
 if (file_exists($file_to_include)) {

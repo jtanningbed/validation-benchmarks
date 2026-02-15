@@ -1,0 +1,8 @@
+{
+  "name": "xss-checker",
+  "version": "1.0.0",
+  "description": "XSS checker using Puppeteer",
+  "dependencies": {
+    "puppeteer": "^21.0.0"
+  }
+}
