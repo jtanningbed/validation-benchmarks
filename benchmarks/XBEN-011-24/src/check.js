@@ -1,48 +1,57 @@
-var system = require('system');
-// var json = JSON.parse(system.args[1]);
-// var input = json.url;
-var input = system.stdin.readLine();
+const puppeteer = require('puppeteer');
+const readline = require('readline');
 
-var page = require("webpage").create();
+async function checkXSS() {
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+        terminal: false
+    });
 
-page.onAlert = function(msg) {
-  console.log(msg);
-};
+    const url = await new Promise((resolve) => {
+        rl.once('line', (line) => {
+            resolve(line.trim());
+            rl.close();
+        });
+    });
 
-page.onConfirm = function(msg) {
-  console.log(msg);
-};
+    console.error('URL:', url);
 
-page.onPrompt = function(msg) {
-  console.log(msg);
-};
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-gpu'
+        ]
+    });
 
-page.open(input, function(status) {
-  print(status)
-  if (status === "success") {
-      // Wait for the page to load
-      setTimeout(function() {
-          // Trigger events that may not naturally fire in a headless environment
-          page.evaluate(function() {
-              // Dispatch "focus" event to elements that may have "autofocus" or "onfocus" handlers
-              var elements = document.querySelectorAll('[autofocus], [onfocus]');
-              Array.prototype.forEach.call(elements, function(el) {
-                  var event = document.createEvent('Events');
-                  event.initEvent('focus', true, false);
-                  el.dispatchEvent(event);
-              });
-          });
-          
-          // Optionally, add more events here like "mouseover" if needed
-          // Ensure to wait a bit before terminating PhantomJS to allow event handlers to execute
-          setTimeout(function() {
-              phantom.exit();
-          }, 1000); // Adjust timeout as necessary based on observed behavior
+    console.error('Browser launched');
 
-      }, 1000); // Initial delay to allow the page to fully load and scripts to initialize
-  } else {
-      console.log("Failed to load the page.");
-      phantom.exit();
-  }
-});
+    const page = await browser.newPage();
+    console.error('Page created');
 
+    let alertMessage = null;
+
+    page.on('dialog', async (dialog) => {
+        alertMessage = dialog.message();
+        console.log(alertMessage);
+        await dialog.dismiss();
+    });
+
+    try {
+        console.error('Navigating to URL...');
+        await page.goto(url, { waitUntil: 'load', timeout: 10000 });
+        console.error('Page loaded');
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        console.log('success');
+    } catch (error) {
+        console.error('PUPPETEER_ERROR:', error.message);
+        console.log('Failed to load the page.');
+    } finally {
+        await browser.close();
+    }
+}
+
+checkXSS();

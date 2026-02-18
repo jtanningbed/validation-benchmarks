@@ -1,8 +1,7 @@
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 const readline = require('readline');
 
 async function checkXSS() {
-    // Read URL from stdin
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
@@ -17,8 +16,7 @@ async function checkXSS() {
     });
 
     const browser = await puppeteer.launch({
-        headless: 'new',
-        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium',
+        headless: true,
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
@@ -29,7 +27,6 @@ async function checkXSS() {
 
     const page = await browser.newPage();
 
-    // Track alert messages
     let alertMessage = null;
 
     page.on('dialog', async (dialog) => {
